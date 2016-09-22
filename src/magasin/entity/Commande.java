@@ -52,6 +52,17 @@ public class Commande implements Serializable {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+    
+    private long somme;
+
+    public long getSomme() {
+        return somme;
+    }
+
+    public void setSomme(long somme) {
+        this.somme = somme;
+    }
+    
 
     public Date getDateEtHeureCommande() {
         return dateEtHeureCommande;
