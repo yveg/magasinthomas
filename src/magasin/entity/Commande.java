@@ -6,7 +6,9 @@
 package magasin.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,6 +18,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,13 +32,13 @@ import javax.persistence.TemporalType;
 @Entity
 public class Commande implements Serializable {
 
-    public enum StatutCommande{
+    public enum StatutCommande {
         EN_COURS,
         TERMINE,
         PAYE,
         LIVRE
     }
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,18 +46,24 @@ public class Commande implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateEtHeureCommande;
-    
+
     @Temporal(TemporalType.DATE)
     private Date dateLivraison;
-    
+
     @Enumerated(EnumType.STRING)
     private StatutCommande statut;
-    
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
-    
+
     private long somme;
+
+    @ManyToMany
+    @JoinTable(name = "commande_produit") //creation nom de table de jointure nommée commande_produit
+    //ajout de liste de produits
+    private List<Produit> produits = new ArrayList<>();
+    
 
     public long getSomme() {
         return somme;
@@ -62,7 +72,6 @@ public class Commande implements Serializable {
     public void setSomme(long somme) {
         this.somme = somme;
     }
-    
 
     public Date getDateEtHeureCommande() {
         return dateEtHeureCommande;
@@ -95,7 +104,7 @@ public class Commande implements Serializable {
     public void setClient(Client client) {
         this.client = client;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -128,5 +137,5 @@ public class Commande implements Serializable {
     public String toString() {
         return "magasin.entity.Commande[ id=" + id + " ]";
     }
-    
+
 }
